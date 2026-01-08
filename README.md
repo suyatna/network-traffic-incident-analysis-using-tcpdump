@@ -20,7 +20,7 @@ Pembahasan disusun berdasarkan pembelajaran saya di program Google Cybersecurity
 
 ## 💭 Incident scenario <a name="scenario">
 
-Beberapa pelanggan melaporkan tidak dapat mengakses website www.yummyrecipesforme.com. Halaman tidak pernah terbuka sepenuhnya dan selalu berakhir dengan pesan kesalahan destination port unreachable. Keluhan ini terjadi berulang kali dan mulai memengaruhi kepercayaan pengguna terhadap layanan klien.
+Beberapa pelanggan melaporkan tidak bisa mengakses website www.yummyrecipesforme.com. Halaman tidak pernah terbuka sepenuhnya dan selalu berakhir dengan pesan kesalahan destination port unreachable. Keluhan ini terjadi berulang kali dan mulai memengaruhi kepercayaan pengguna terhadap layanan klien.
 
 <img width="902" height="448" alt="LKXsnNIhT0e1mAz5AEvxog_d363c94e0a4f4a8b90b0be403f6ee1f1_mMBaLWLyXG2omYBcSdjuR8y5_S59zow1ZEPYdjNyJzA1B0r55nI9KmDosI8QHXcEwE51NxM3N5gNtMgSOyVDHyJVLZvZA7_jJtkzUKfxuqFUJPHs57vVVES-LbG5teR8eir4idaqsxFaYJhhVJZn-a_S-txb7zQNIZq07XESgSkqDHuzfvALfYk3lipGVBY" src="https://github.com/user-attachments/assets/b87f32cf-0da8-41ca-9f4a-ba9c4495d203" />
 
