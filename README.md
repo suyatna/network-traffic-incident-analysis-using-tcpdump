@@ -1,4 +1,4 @@
-# Network traffic incident analysis using Wireshark
+# Network traffic incident analysis using tcpdump
 
 ## 📑 Table of contents
 
