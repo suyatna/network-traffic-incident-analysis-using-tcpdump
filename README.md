@@ -1,16 +1,17 @@
 # Network traffic incident analysis using tcpdump
 
-## 📑 Table of contents
+## 📌 Table of contents
 
-1. [Introduction](#introduction)
-2. [Incident scenario](#scenario)
-3. [Objective](#objective)
-4. [Cybersecurity incident report](#report)
-5. [Conclusion](#conclusion)
+1. [Background](#background)
+2. [Incident overview](#scenario)
+3. [Objective of analysis](#objective)
+4. [Traffic analysis process](#analysis)
+5. [Insights and lessons learned](#insight)
+6. [Conclusion](#conclusion)
 
 ---
 
-## 👋 Introduction <a name="introduction">
+## 🧠 Background <a name="background">
 
 Studi kasus ini saya buat sebagai bagian dari latihan cybersecurity yang berfokus pada keamanan jaringan dan analisis insiden. Skenario yang digunakan berupa simulasi gangguan akses website akibat masalah pada lalu lintas jaringan, sehingga alur kejadian bisa dipahami secara jelas dan masuk akal.
 
@@ -18,7 +19,7 @@ Pembahasan disusun berdasarkan pembelajaran saya di program Google Cybersecurity
 
 ---
 
-## 💭 Incident scenario <a name="scenario">
+## 🚨 Incident overview <a name="scenario">
 
 Beberapa pelanggan melaporkan tidak bisa mengakses website yummyrecipesforme.com. Halaman tidak pernah terbuka sepenuhnya dan selalu berakhir dengan pesan kesalahan destination port unreachable. Keluhan ini terjadi berulang kali dan mulai memengaruhi kepercayaan pengguna terhadap layanan klien.
 
@@ -32,7 +33,7 @@ Temuan awal ini mengarah pada gangguan pada layanan DNS yang berdampak langsung 
 
 ---
 
-## 🎯 Objective <a name="objective">
+## 🎯 Objective of analysis <a name="objective">
 
 Studi kasus ini dibuat untuk memahami dan menganalisis gangguan jaringan yang berdampak langsung pada akses website. Fokus utama diarahkan pada pencarian sumber masalah melalui penelusuran lalu lintas jaringan dari data hasil tangkapan paket.
 
@@ -43,17 +44,15 @@ Tujuan analisis meliputi:
 
 ---
 
-## 📋 Cybersecurity incident report <a name="report">
+## 🔍 Network traffic analysis <a name="analysis">
 
-### Network traffic analysis
-
-|Bagian 1: Rangkuman masalah utama yang ditemukan dari analisis lalu lintas DNS dan ICMP|Penjelasan|
+|Masalah utama yang ditemukan dari analisis lalu lintas DNS dan ICMP|Penjelasan|
 |---|---|
 |A. Penggunaan protokol DNS dan ICMP|Pada insiden ini, browser menggunakan protokol UDP untuk menjalankan proses DNS saat mencari alamat IP domain yummyrecipesforme.com. Permintaan DNS sudah berhasil dikirim ke server tujuan. Respons yang diterima bukan jawaban DNS, melainkan pesan kesalahan melalui protokol ICMP. Pesan ini menandakan adanya masalah saat sistem mencoba mengakses layanan DNS.|
 |B. Pola lalu lintas pada log tcpdump|Log menunjukkan pola yang konsisten. Komputer klien mengirim paket UDP ke server DNS, lalu server membalas dengan pesan ICMP ke klien. Pesan kesalahan yang muncul adalah udp port 53 unreachable. Port 53 merupakan port standar untuk layanan DNS. Kemunculan pesan ini secara berulang mengindikasikan bahwa layanan DNS di server tujuan mengalami gangguan. Detail seperti nomor kueri 35084 dan penanda A? menunjukkan bahwa permintaan tersebut adalah permintaan DNS untuk record A, yaitu proses pencarian alamat IP dari sebuah domain.|
 |C. Interpretasi masalah pada log|Pesan kesalahan ICMP mengarah pada kondisi di mana server DNS tidak merespons permintaan yang masuk ke port 53. Layanan DNS kemungkinan tidak aktif, diblokir, atau tidak dapat dijangkau. DNS merupakan tahap awal sebelum browser terhubung ke website. Kegagalan pada tahap ini membuat browser tidak pernah memperoleh alamat IP tujuan. Dampaknya, website tidak dapat diakses oleh pengguna.|
 
-|Bagian 2: Penjelasan hasil analisis data yang dilakukan dan uraian penyebab utama terjadinya insiden|Penjelasan|
+|Hasil analisis data yang dilakukan dan penyebab utama terjadinya insiden|Penjelasan|
 |---|---|
 |D. Waktu pertama kali insiden terjadi|Insiden pertama kali terdeteksi pada pukul 13.24. Hal ini terlihat dari stempel waktu awal pada log tcpdump, yaitu 13:24:32.192571. Waktu tersebut menandai saat paket DNS pertama kali dikirim dan gagal diproses oleh server tujuan.|
 |E. Skenario, peristiwa, dan gejala|Pengguna melaporkan bahwa website yummyrecipesforme.com tidak dapat diakses. Halaman tidak pernah berhasil dimuat dan selalu berakhir dengan pesan kesalahan destination port unreachable. Gejala ini muncul secara konsisten pada beberapa pengguna dan dapat direplikasi saat dilakukan pengujian oleh analis.|
@@ -62,10 +61,16 @@ Tujuan analisis meliputi:
 |H. Dugaan akar penyebab|Akar masalah mengarah pada gangguan layanan DNS di sisi server tujuan. Kemungkinan penyebab meliputi layanan DNS yang tidak aktif, kesalahan konfigurasi jaringan, atau aturan firewall yang memblokir akses ke port 53. Pada beberapa kondisi, gangguan ini juga bisa dipicu oleh serangan yang menargetkan layanan DNS.|
 |I. Langkah selanjutnya|Langkah berikutnya difokuskan pada pemulihan layanan DNS dan pencegahan kejadian serupa. Tim teknis perlu memastikan layanan DNS berjalan normal pada port 53 serta meninjau konfigurasi firewall agar lalu lintas DNS tidak terblokir. Pengujian konektivitas DNS dilakukan dari beberapa titik jaringan untuk memastikan masalah tidak bersifat lokal. Pemantauan lalu lintas DNS juga perlu ditingkatkan agar gangguan dapat terdeteksi lebih dini. Setelah perbaikan diterapkan, akses website diuji kembali untuk memastikan layanan sudah kembali stabil.|
 
+Analysis notes:
+
+Analisis dilakukan dengan memanfaatkan tcpdump untuk melihat langsung pola lalu lintas jaringan dan menangkap aktivitas yang terasa tidak wajar. Perhatian difokuskan pada asal dan tujuan komunikasi, jenis protokol yang digunakan, serta intensitas paket yang muncul dalam waktu singkat. Hasil pengamatan pada data menunjukkan adanya pola trafik yang berbeda dari kondisi normal. Temuan ini menjadi titik awal investigasi untuk menelusuri penyebab insiden dan memahami dampaknya terhadap jaringan.
+
 ---
 
-## 🏁 Conclusion <a name="conclusion">
+## 💡 Insights and lessons learned <a name="insight">
 
-Hasil analisis lalu lintas jaringan menunjukkan bahwa insiden ini dipicu oleh kegagalan layanan DNS yang tidak dapat menerima permintaan pada port 53. Setiap permintaan DNS yang dikirim dari client melalui protokol UDP selalu dibalas dengan pesan ICMP destination port unreachable. Kondisi ini membuat proses resolusi domain gagal dan akses ke website terhenti.
+Insiden ini menunjukkan bahwa DNS adalah layanan krusial yang berpengaruh langsung pada ketersediaan website. Gangguan pada port 53 membuat proses resolusi domain berhenti, meskipun layanan web di sisi server sebenarnya masih berjalan normal.
 
-Insiden ini memperlihatkan bahwa gangguan pada satu layanan inti seperti DNS bisa langsung memengaruhi ketersediaan layanan web secara keseluruhan. Analisis paket menggunakan tcpdump membantu mengidentifikasi protokol dan layanan yang terdampak dengan jelas. Temuan ini dapat menjadi pijakan bagi tim teknis untuk melakukan perbaikan serta mencegah kejadian serupa di kemudian hari.
+Analisis paket menggunakan tcpdump memperlihatkan permintaan DNS berbasis UDP yang terus dikirim dan dibalas dengan pesan ICMP destination port unreachable. Pola tersebut menjadi sinyal jelas adanya kegagalan layanan DNS dan membantu mempercepat penelusuran akar masalah di level jaringan.
+
+Pembelajaran dari kasus ini menegaskan pentingnya pemantauan layanan inti dan validasi respons jaringan secara rutin. Pendekatan packet analysis memberi gambaran yang akurat bagi tim teknis untuk mengambil langkah perbaikan yang tepat dan memperkuat ketahanan sistem terhadap gangguan serupa di masa depan.
